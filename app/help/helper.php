@@ -1,7 +1,8 @@
 <?php
 function getSetting($nameSetting = 'sitename')
 {
-    return App\Sitesetting::where('name_setting', $nameSetting)->get()[0]->value;
+    $row = App\Sitesetting::where('name_setting', $nameSetting)->first();
+    return $row->value ?? '';
 }
 
 function getLang()

@@ -37,7 +37,7 @@ class HomeController extends Controller
         
         // slider 
         $homeslider = Homesetting::where('name_setting', 'home_slider')->first();
-        $slider = explode(',',$homeslider->value);
+        $slider = array_values(array_filter(array_map('intval', explode(',', (string)($homeslider?->value ?? '')))));
         $slideritems = DB::table('items')
          ->join('__items', 'items.id', '=', '__items.item_id')
          ->select('items.id','items.destination_id','items.category_id','items.days','items.sale_text',
@@ -50,7 +50,7 @@ class HomeController extends Controller
         
         // most popular tours
         $populartours = Homesetting::where('name_setting', 'home_most_popular_tours')->first();
-        $mostpopulartours = explode(',',$populartours->value);
+        $mostpopulartours = array_values(array_filter(array_map('intval', explode(',', (string)($populartours?->value ?? '')))));
         $popularitems = DB::table('items')
          ->join('__items', 'items.id', '=', '__items.item_id')
          ->select('items.id','items.destination_id','items.category_id','items.days','items.sale_text',
@@ -63,7 +63,7 @@ class HomeController extends Controller
         
         // best offers
         $bestoffers = Homesetting::where('name_setting', 'home_best_offers')->first();
-        $homebestoffers = explode(',',$bestoffers->value);
+        $homebestoffers = array_values(array_filter(array_map('intval', explode(',', (string)($bestoffers?->value ?? '')))));
         $bestoffersitems = DB::table('items')
          ->join('__items', 'items.id', '=', '__items.item_id')
          ->select('items.id','items.destination_id','items.category_id','items.days','items.sale_text','items.sale_percentage','items.triple_price', 'items.triple_price2','items.prices_type','items.person7_10_price', 'items.special_price','items.primary_image', '__items.name','__items.slug')
@@ -75,7 +75,7 @@ class HomeController extends Controller
         
         // Top destinations
         $otherdestinations = Homesetting::where('name_setting', 'home_other_destinations')->first();
-        $topdestinations = explode(',',$otherdestinations->value);
+        $topdestinations = array_values(array_filter(array_map('intval', explode(',', (string)($otherdestinations?->value ?? '')))));
         $topdestinationitems = DB::table('destinations')
          ->join('__destinations', 'destinations.id', '=', '__destinations.destination_id')
          ->select('destinations.id','destinations.photo','__destinations.name','__destinations.slug')
@@ -115,3 +115,4 @@ class HomeController extends Controller
         ->with('homeservicetitles', $homeservicetitles);
     }
 }
+

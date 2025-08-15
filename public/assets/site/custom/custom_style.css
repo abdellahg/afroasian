@@ -1,0 +1,58 @@
+.booking-details-tabbable .tab-content
+{
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+}
+
+.red{
+    color:#e41f1f;
+}
+.green{
+    color:#0cb31a;
+}
+.booking-item-details .booking-item-header-price .text-lg{
+    font-size: 30px !important;
+}
+.book-now-btn{
+    float: right;
+}
+.mainmenu{
+    padding-left:0px;
+    padding-right:0px;
+}
+.slider-img{
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+}
+
+@media (max-width: 992px){
+    .top-area .owl-wrapper-outer, .top-area .owl-carousel-area, .top-area .owl-controls, .top-area .owl-wrapper, .top-area .bg-holder{
+       max-height:500px !important;
+    }
+    .owl-cap-title, .lh1em {
+       font-size: 30px !important;
+    }
+    .slider-img{
+       height:520px;
+    }
+
+    .logo, .langs{
+     text-align:center;
+    }
+}
+@media (max-width: 490px){
+    .top-area .owl-wrapper-outer, .top-area .owl-carousel-area, .top-area .owl-controls, .top-area .owl-wrapper, .top-area .bg-holder{
+       max-height:300px !important;
+    }
+    .owl-cap-title, .lh1em {
+        font-size: 22px !important;
+    }
+    .slider-img{
+       height:320px;
+    }
+    .logo, .langs{
+     text-align:center;
+    }
+}

@@ -12,4 +12,13 @@ class Blog extends Model
         'category_id',
         'photo',
     ];
+
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

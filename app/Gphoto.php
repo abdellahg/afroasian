@@ -10,4 +10,9 @@ class Gphoto extends Model
         'photo_title',
         'gallery_id',
     ];
+
+    public function gallery()
+    {
+        return $this->belongsTo(Gallery::class);
+    }
 }

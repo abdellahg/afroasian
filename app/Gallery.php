@@ -10,4 +10,13 @@ class Gallery extends Model
         'active',
         'order',
     ];
+
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
+    public function photos()
+    {
+        return $this->hasMany(Gphoto::class, 'gallery_id');
+    }
 }

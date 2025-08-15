@@ -11,6 +11,10 @@ class Category extends Model
         'active',
     ];
 
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
     public function isMain()
     {
         return $this->parent_id == 0;
@@ -78,4 +82,13 @@ class Category extends Model
         return $this->hasMany('App\Category', 'parent_id');
     }
     
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class);
+    }
 }

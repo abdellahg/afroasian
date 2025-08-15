@@ -158,7 +158,6 @@ return [
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
-        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
@@ -179,7 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
+        App\Providers\ConfigServiceProvider::class,
 
     ],
 
@@ -230,8 +229,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
-        'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
+        'Form' => App\Support\SimpleForm::class,
 
     ],
 

@@ -2,49 +2,51 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Throwable;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that should not be reported.
+     * The list of the inputs that are never flashed to the session on validation exceptions.
      *
-     * @var array
+     * @var array<int, string>
      */
-    protected $dontReport = [
-        \Illuminate\Auth\AuthenticationException::class,
-        \Illuminate\Auth\Access\AuthorizationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
-        \Illuminate\Session\TokenMismatchException::class,
-        \Illuminate\Validation\ValidationException::class,
+    protected $dontFlash = [
+        'current_password',
+        'password',
+        'password_confirmation',
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception  $exception
-     * @return void
+     * Register the exception handling callbacks for the application.
      */
-    public function report(Exception $exception)
+    public function register(): void
     {
-        parent::report($exception);
+        $this->reportable(function (Throwable $e) {
+            //
+        });
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Throwable  $e
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $e)
     {
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
+    }
+
+    /**
+     * Report or log an exception.
+     */
+    public function report(Throwable $e): void
+    {
+        parent::report($e);
     }
 
     /**

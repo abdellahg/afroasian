@@ -12,4 +12,13 @@ class Destination extends Model
         'foreign',
     ];
 
+    protected $casts = [
+        'active' => 'boolean',
+        'foreign' => 'boolean',
+    ];
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

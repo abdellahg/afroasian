@@ -10,4 +10,9 @@ class Image extends Model
         'img_name',
         'item_id',
     ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 }
