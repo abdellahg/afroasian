@@ -1,0 +1,5 @@
+@include('site.layouts.parts.head')
+@include('site.layouts.parts.header')
+    @yield('content')
+@include('site.layouts.parts.footer')
+@include('site.layouts.parts.foot')

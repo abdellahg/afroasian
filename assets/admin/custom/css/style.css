@@ -1,0 +1,12 @@
+.nav-pills.nav-pills-toolbar > li > a{
+    background: #f5f5f5;
+}
+
+.nav-pills > li.active > a, 
+.nav-pills > li.active > a:hover, 
+.nav-pills > li.active > a:focus{
+    background-color:#05a6bb;
+}
+.red{
+    color:#D84315;
+}
