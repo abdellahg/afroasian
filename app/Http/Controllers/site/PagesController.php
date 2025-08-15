@@ -12,20 +12,20 @@ use Mail;
 class PagesController extends Controller
 {
     public function about(){
-        $pagessettings = Pagessetting::where('page', '=', 'about')->get();
+        $pagessettings = Pagessetting::where('slug', '=', 'about')->get();
         return view('site.pages.about.index')
             ->with('pagessettings', $pagessettings);
             
     }
     
     public function contact(){
-        $pagessettings = Pagessetting::where('page', '=', 'contact')->get();
+        $pagessettings = Pagessetting::where('slug', '=', 'contact')->get();
         return view('site.pages.contact.index')
             ->with('pagessettings', $pagessettings);
     }
     
     public function terms(){
-        $pagessettings = Pagessetting::where('page', '=', 'terms')->get();
+        $pagessettings = Pagessetting::where('slug', '=', 'terms')->get();
         return view('site.pages.terms.index')
             ->with('pagessettings', $pagessettings);
     }

@@ -10,16 +10,20 @@ use DB;
 class ReviewController extends Controller
 {
      public function reviews(){
-         $reviews = DB::table('reviews')
-             ->orderby('id', 'desc')
-             ->get();
+        $reviews = DB::table('reviews')
+            ->leftJoin('users', 'reviews.user_id', '=', 'users.id')
+            ->select('reviews.*', 'users.name', 'users.email', DB::raw('reviews.rating as stars'))
+            ->orderBy('reviews.id', 'desc')
+            ->get();
         return view('admin.pages.reviews.index')
         ->with('reviews', $reviews);
     }
     
     public function review($id){
          $review = DB::table('reviews')
-             ->where('id', $id)
+             ->leftJoin('users', 'reviews.user_id', '=', 'users.id')
+             ->select('reviews.*', 'users.name', 'users.email', DB::raw('reviews.rating as stars'))
+             ->where('reviews.id', $id)
              ->first();
         return view('admin.pages.reviews.review')
         ->with('review', $review);

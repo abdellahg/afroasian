@@ -95,7 +95,7 @@ class PagesController extends Controller
     }
     
     public function aboutSettings(){
-        $pagessettings = Pagessetting::where('page', '=', 'about')->get();
+        $pagessettings = Pagessetting::where('slug', '=', 'about')->get();
         return view('admin.pages.settings.about-settings')
             ->with('pagessettings', $pagessettings);
     }
@@ -110,7 +110,7 @@ class PagesController extends Controller
     }
     
     public function contactSettings(){
-        $pagessettings = Pagessetting::where('page', '=', 'contact')->get();
+        $pagessettings = Pagessetting::where('slug', '=', 'contact')->get();
         return view('admin.pages.settings.contact-settings')
             ->with('pagessettings', $pagessettings);
     }
@@ -124,7 +124,7 @@ class PagesController extends Controller
     }
     
     public function termsSettings(){
-        $pagessettings = Pagessetting::where('page', '=', 'terms')->get();
+        $pagessettings = Pagessetting::where('slug', '=', 'terms')->get();
         return view('admin.pages.settings.terms-settings')
             ->with('pagessettings', $pagessettings);
     }
@@ -138,7 +138,7 @@ class PagesController extends Controller
     }
     
     public function registerSettings(){
-        $pagessettings = Pagessetting::where('page', '=', 'register')->get();
+        $pagessettings = Pagessetting::where('slug', '=', 'register')->get();
         return view('admin.pages.settings.register-settings')
             ->with('pagessettings', $pagessettings);
     }

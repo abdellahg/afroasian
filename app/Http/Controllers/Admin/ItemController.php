@@ -203,7 +203,7 @@ class ItemController extends Controller
         $item1 = DB::table('items')->find($id);
         $item2 = new Item();
         foreach(Locale::all() as $locale) {
-            $item2[$locale->name] = DB::table('__items')
+            $item2[$locale->code] = DB::table('__items')
              ->select('name','short_description','meta_description','meta_keywords','price_policy','notes')
              ->where('item_id', '=', $id)
              ->where('locale_id', '=', $locale->id)
@@ -213,7 +213,7 @@ class ItemController extends Controller
         
         $itineraries = new Item();
         foreach(Locale::all() as $locale) {
-            $itineraries[$locale->name] = DB::table('__itineraries')
+            $itineraries[$locale->code] = DB::table('__itineraries')
              ->select('id','iti_title','iti_text')
              ->where('item_id', '=', $id)
              ->where('locale_id', '=', $locale->id)
@@ -222,7 +222,7 @@ class ItemController extends Controller
         
         $includes = new Item();
         foreach(Locale::all() as $locale) {
-            $includes[$locale->name] = DB::table('__includes')
+            $includes[$locale->code] = DB::table('__includes')
              ->select('id','text')
              ->where('item_id', '=', $id)
              ->where('locale_id', '=', $locale->id)
@@ -231,7 +231,7 @@ class ItemController extends Controller
         
         $excludes = new Item();
         foreach(Locale::all() as $locale) {
-            $excludes[$locale->name] = DB::table('__excludes')
+            $excludes[$locale->code] = DB::table('__excludes')
              ->select('id','text')
              ->where('item_id', '=', $id)
              ->where('locale_id', '=', $locale->id)

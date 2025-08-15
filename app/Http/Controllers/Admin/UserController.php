@@ -10,8 +10,8 @@ class UserController extends Controller
 {
     
     public function index(){
-        $users = DB::table('__users')
-            ->orderby('id', 'desc')
+        $users = DB::table('users')
+            ->orderBy('id', 'desc')
             ->get();
         return view('admin.pages.users.index')
         ->with('users', $users);

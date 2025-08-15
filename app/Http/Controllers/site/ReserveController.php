@@ -202,11 +202,11 @@ class ReserveController extends Controller
                 $user_name = Auth::user()->name;
                 $user_email = Auth::user()->email;
            }else{
-               DB::table('__users')->where('user_id', $userid)->update(array(
+               _User::where('user_id', $userid)->update([
                 'nationality' => $request->nationality,
                 'country_code' => $request->country_code,
                 'mobile' => $request->mobile
-                ));
+               ]);
                 $res_user_id = _User::where('user_id', Auth::user()->id)->first()->id;
                 $user_name = Auth::user()->name;
                 $user_email = Auth::user()->email;

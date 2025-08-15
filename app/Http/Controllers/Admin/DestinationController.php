@@ -65,13 +65,13 @@ class DestinationController extends Controller
          }
         
          foreach(Locale::all() as $locale) {
-             $_destination = new _Destination();
-             $_destination->destination_id = $destination->id;
-             $_destination->locale_id = $locale->id;
-             $_destination->name = $r->{$locale->name}['name'];
-             $_destination->slug = $this->generateSlug($r->{$locale->name}['name']);
-             $_destination->save();
-         }
+            $_destination = new _Destination();
+            $_destination->destination_id = $destination->id;
+            $_destination->locale_id = $locale->id;
+            $_destination->name = $r->{$locale->code}['name'];
+            $_destination->slug = $this->generateSlug($r->{$locale->code}['name']);
+            $_destination->save();
+        }
         if($r->foreign == 0){
             return redirect('admin/destinations/local')->with('success','Destination added  Successfully !');  
         }elseif($r->foreign == 1){
@@ -84,7 +84,7 @@ class DestinationController extends Controller
         $destination1 = DB::table('destinations')->find($id);
         $destination2 = new Destination();
         foreach(Locale::all() as $locale) {
-            $destination2[$locale->name] = DB::table('__destinations')
+            $destination2[$locale->code] = DB::table('__destinations')
              ->select('name')
              ->where('destination_id', '=', $id)
               ->where('locale_id', '=', $locale->id)
@@ -126,7 +126,7 @@ class DestinationController extends Controller
                  ->where('destination_id', $id)
                  ->where('locale_id', $locale->id) 
                  ->update([
-                'name' => $r->{$locale->name}['name'],
+                'name' => $r->{$locale->code}['name'],
                 //'slug'=> $this->generateSlug($r->{$locale->name}['name']),
                 ]);
          }

@@ -11,9 +11,9 @@ class ReserveController extends Controller
 {
     public function index(){
          $reservations = DB::table('reservations')
-             ->join('__users', 'reservations.user_id', '=', '__users.id')
+             ->join('users', 'reservations.user_id', '=', 'users.id')
              ->join('__items', 'reservations.item_id', '=', '__items.item_id')
-             ->select('reservations.id','reservations.user_id','reservations.item_id', 'reservations.arrivaldate','reservations.depaturedate','reservations.total_amount','reservations.status','__users.name as username', '__items.name as itemname', '__items.slug')
+             ->select('reservations.id','reservations.user_id','reservations.item_id', 'reservations.arrivaldate','reservations.depaturedate','reservations.total_amount','reservations.status','users.name as username', '__items.name as itemname', '__items.slug')
              ->where('__items.locale_id', '=', 1)
              ->get();
         return view('admin.pages.reserve.index')
@@ -21,17 +21,17 @@ class ReserveController extends Controller
     }
     
     public function reservationUser($user_id){
-        $user = DB::table('__users')
-             ->where('__users.id', '=',$user_id)
+        $user = DB::table('users')
+             ->where('users.id', '=',$user_id)
              ->first();
              
-        if($user->user_id !=0){
+        if($user->id !=0){
             $reservations = DB::table('reservations')
-             ->join('__users', 'reservations.user_id', '=', '__users.id')
+             ->join('users', 'reservations.user_id', '=', 'users.id')
              ->join('__items', 'reservations.item_id', '=', '__items.item_id')
-             ->select('reservations.id','reservations.user_id','reservations.item_id', 'reservations.arrivaldate','reservations.depaturedate','reservations.total_amount','reservations.status','__users.name as username', '__items.name as itemname', '__items.slug')
+             ->select('reservations.id','reservations.user_id','reservations.item_id', 'reservations.arrivaldate','reservations.depaturedate','reservations.total_amount','reservations.status','users.name as username', '__items.name as itemname', '__items.slug')
              ->where('__items.locale_id', '=', 1)
-             ->where('__users.user_id', '=',$user->user_id)
+             ->where('reservations.user_id', '=',$user->id)
              ->get();
              
         return view('admin.pages.reserve.user')
@@ -49,8 +49,8 @@ class ReserveController extends Controller
         $reservation = DB::table('reservations')
              ->where('id', '=', $id)
              ->first();
-        $user = DB::table('__users')
-             ->where('__users.id', '=',$reservation->user_id)
+        $user = DB::table('users')
+             ->where('users.id', '=',$reservation->user_id)
              ->first(); 
              
          return view('admin.pages.reserve.reservation')
