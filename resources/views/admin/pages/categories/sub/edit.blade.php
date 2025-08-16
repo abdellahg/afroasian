@@ -2,7 +2,7 @@
 @section('breadcrumb')
 <li><a href="{{url('/admin/dashboard')}}"><i class="icon-home2 position-left"></i> Dashboard</a></li>
 <li><a href="{{url('/admin/categories/sub')}}">Sub Categories</a></li>
-<li class="active">Edit Category : {{$category['en']->name}}</li>
+<li class="active">Edit Category : {{ data_get($category, app()->getLocale().'.name') ?? data_get($category, 'en.name') }}</li>
 @stop
 @section('page-content')
     <div class="row">
@@ -25,4 +25,3 @@
     </div>
  
 @endsection
-

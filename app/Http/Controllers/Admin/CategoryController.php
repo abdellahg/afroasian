@@ -17,7 +17,7 @@ class CategoryController extends Controller
              ->join('__categories', 'categories.id', '=', '__categories.category_id')
              ->select('categories.id', 'categories.parent_id', 'categories.order', 'categories.active', 'categories.at_menu','__categories.name')
              ->where('categories.parent_id', '=', 0)
-             ->where('__categories.locale_id', '=', 1)
+             ->where('__categories.locale_id', '=', getFallbackLocaleId())
              ->get();
           $childs = DB::table('categories')
              ->where('parent_id','!=', 0)
@@ -42,8 +42,8 @@ class CategoryController extends Controller
              $_category = new _Category();
              $_category->category_id = $category->id;
              $_category->locale_id = $locale->id;
-             $_category->name = $r->{$locale->name}['name'];
-             $_category->slug = $this->generateSlug($r->{$locale->name}['name']);
+             $_category->name = data_get($r->all(), $locale->code.'.name');
+             $_category->slug = $this->generateSlug($_category->name);
              $_category->save();
          }
         
@@ -54,10 +54,10 @@ class CategoryController extends Controller
         $category1 = DB::table('categories')->find($id);
         $category2 = new Category();
         foreach(Locale::all() as $locale) {
-            $category2[$locale->name] = DB::table('__categories')
+            $category2[$locale->code] = DB::table('__categories')
              ->select('name')
              ->where('category_id', '=', $id)
-              ->where('locale_id', '=', $locale->id)
+             ->where('locale_id', '=', $locale->id)
              ->first();
         }
         $category = collect($category1)->merge(collect($category2));
@@ -77,7 +77,7 @@ class CategoryController extends Controller
                  ->where('category_id', $id)
                  ->where('locale_id', $locale->id) 
                  ->update([
-                'name' => $r->{$locale->name}['name'],
+               'name' => data_get($r->all(), $locale->code.'.name'),
                 //'slug'=> $this->generateSlug($r->{$locale->name}['name']),
                 ]);
          }
@@ -89,14 +89,14 @@ class CategoryController extends Controller
              ->join('__categories', 'categories.id', '=', '__categories.category_id')
              ->select('categories.id', 'categories.parent_id', 'categories.order', 'categories.active', 'categories.at_menu','__categories.name')
              ->where('categories.parent_id','<>', 0)
-             ->where('__categories.locale_id', '=', 1)
+             ->where('__categories.locale_id', '=', getFallbackLocaleId())
              ->get();
         
         $parents = DB::table('categories')
              ->join('__categories', 'categories.id', '=', '__categories.category_id')
              ->select('categories.id','__categories.name')
              ->where('categories.parent_id', '=', 0)
-             ->where('__categories.locale_id', '=', 1)
+             ->where('__categories.locale_id', '=', getFallbackLocaleId())
              ->get();
         return view('admin.pages.categories.sub.index')
         ->with("categories", $categories)
@@ -108,7 +108,7 @@ class CategoryController extends Controller
              ->join('__categories', 'categories.id', '=', '__categories.category_id')
              ->select('categories.id','__categories.name')
              ->where('categories.parent_id', '=', 0)
-             ->where('__categories.locale_id', '=', 1)
+             ->where('__categories.locale_id', '=', getFallbackLocaleId())
              ->where('categories.active', '=', 1)
              ->get();
         return view('admin.pages.categories.sub.add')
@@ -118,7 +118,7 @@ class CategoryController extends Controller
     public function storeSub(Category $category, Request $r){
          $this->validate(request(), [
     		'parent_id' => 'required',
- 		]);
+		]);
         
          $category->active = $r->active;
          $category->order = $r->order;
@@ -130,8 +130,8 @@ class CategoryController extends Controller
              $_category = new _Category();
              $_category->category_id = $category->id;
              $_category->locale_id = $locale->id;
-             $_category->name = $r->{$locale->name}['name'];
-             $_category->slug = $this->generateSlug($r->{$locale->name}['name']);
+             $_category->name = data_get($r->all(), $locale->code.'.name');
+             $_category->slug = $this->generateSlug($_category->name);
              $_category->save();
          }
         
@@ -142,10 +142,10 @@ class CategoryController extends Controller
         $category1 = DB::table('categories')->find($id);
         $category2 = new Category();
         foreach(Locale::all() as $locale) {
-            $category2[$locale->name] = DB::table('__categories')
+            $category2[$locale->code] = DB::table('__categories')
              ->select('name')
              ->where('category_id', '=', $id)
-              ->where('locale_id', '=', $locale->id)
+             ->where('locale_id', '=', $locale->id)
              ->first();
         }
         $category = collect($category1)->merge(collect($category2));
@@ -154,7 +154,7 @@ class CategoryController extends Controller
              ->join('__categories', 'categories.id', '=', '__categories.category_id')
              ->select('categories.id','__categories.name')
              ->where('categories.parent_id', '=', 0)
-             ->where('__categories.locale_id', '=', 1)
+             ->where('__categories.locale_id', '=', getFallbackLocaleId())
              ->get();
         return view('admin.pages.categories.sub.edit')
         ->with('category', $category)
@@ -164,7 +164,7 @@ class CategoryController extends Controller
     public function updateSub(Request $r, $id){
         $this->validate(request(), [
     		'parent_id' => 'required',
- 		]);
+		]);
         DB::table('categories')->where('id', $id)->update([
                 'active' =>  $r->active,
                 'order'=> $r->order,
@@ -176,7 +176,7 @@ class CategoryController extends Controller
                  ->where('category_id', $id)
                  ->where('locale_id', $locale->id) 
                  ->update([
-                'name' => $r->{$locale->name}['name'],
+               'name' => data_get($r->all(), $locale->code.'.name'),
                 //'slug'=> $this->generateSlug($r->{$locale->name}['name']),
                 ]);
          }
@@ -199,3 +199,4 @@ class CategoryController extends Controller
     }
     
 }
+

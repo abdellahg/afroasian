@@ -7,14 +7,32 @@ function getSetting($nameSetting = 'sitename')
 
 function getLang()
 {
-    if(app()->getLocale() == 'en'){
-        return 1;
-    }elseif(app()->getLocale() == 'es'){
-        return 2;
-    }elseif(app()->getLocale() == 'pt'){
-        return 3;
+    // Backward-compatible alias for current locale ID
+    return getLocaleId();
+}
+
+// Return locale id for a given code (or current app locale if null)
+function getLocaleId($code = null)
+{
+    static $cache = [];
+    $code = $code ?: app()->getLocale();
+    if (isset($cache[$code])) return $cache[$code];
+    $id = DB::table('locales')->where('code', $code)->value('id');
+    if (!$id) {
+        $fallback = config('app.fallback_locale', 'en');
+        $id = DB::table('locales')->where('code', $fallback)->value('id');
     }
-    
+    return $cache[$code] = $id;
+}
+
+// Return the fallback locale id (usually config('app.fallback_locale'))
+function getFallbackLocaleId()
+{
+    static $fallbackId = null;
+    if ($fallbackId !== null) return $fallbackId;
+    $fallbackCode = config('app.fallback_locale', 'en');
+    $fallbackId = DB::table('locales')->where('code', $fallbackCode)->value('id');
+    return $fallbackId;
 }
 
 function getMainCategories($lang = 1){
@@ -46,44 +64,47 @@ function subMainCategories($lang = 1){
 }
 
 function getCatEnSlug($cat_id){
+    $localeId = getFallbackLocaleId();
     $enSlug = DB::table('categories')
              ->join('__categories', 'categories.id', '=', '__categories.category_id')
              ->select('categories.id', '__categories.slug')
              ->where('categories.id', '=', $cat_id)
              ->where('categories.parent_id', '!=', 0)
-             ->where('__categories.locale_id', '=', 1)
+             ->where('__categories.locale_id', '=', $localeId)
              ->first();
         return  $enSlug->slug;
 }
 
 
 function getDestEnSlug($dest_id){
+    $localeId = getFallbackLocaleId();
     $enSlug = DB::table('destinations')
              ->join('__destinations', 'destinations.id', '=', '__destinations.destination_id')
              ->select('destinations.id', '__destinations.slug')
              ->where('destinations.id', '=', $dest_id)
-             ->where('__destinations.locale_id', '=', 1)
+             ->where('__destinations.locale_id', '=', $localeId)
              ->first();
         return  $enSlug->slug;
 }
 
 function getItemEnSlug($item_id){
+    $localeId = getFallbackLocaleId();
     $enSlug = DB::table('items')
              ->join('__items', 'items.id', '=', '__items.item_id')
              ->select('items.id', '__items.slug')
              ->where('items.id', '=', $item_id)
-             ->where('__items.locale_id', '=', 1)
+             ->where('__items.locale_id', '=', $localeId)
              ->first();
         return  $enSlug->slug;
 }
 
-function galleries($lang = 1){
+function galleries($lang = null){
     if ($lang != NULL) {
          $galleries = DB::table('galleries')
              ->join('__galleries', 'galleries.id', '=', '__galleries.gallery_id')
              ->select('galleries.id', '__galleries.name','__galleries.slug')
              ->where('galleries.active', '=', 1)
-             ->where('__galleries.locale_id', '=', $lang)
+             ->where('__galleries.locale_id', '=', $lang ?: getLang())
              ->orderBy('galleries.order')
              ->get();
         return  $galleries;
@@ -91,31 +112,34 @@ function galleries($lang = 1){
 }
 
 function getGallaryEnSlug($item_id){
+    $localeId = getFallbackLocaleId();
     $enSlug = DB::table('galleries')
              ->join('__galleries', 'galleries.id', '=', '__galleries.gallery_id')
              ->select('galleries.id', '__galleries.slug')
              ->where('galleries.id', '=', $item_id)
-             ->where('__galleries.locale_id', '=', 1)
+             ->where('__galleries.locale_id', '=', $localeId)
              ->first();
         return  $enSlug->slug;
 }
 
 function getBcategoryEnSlug($category_id){
+    $localeId = getFallbackLocaleId();
     $enSlug = DB::table('bcategories')
              ->join('__bcategories', 'bcategories.id', '=', '__bcategories.category_id')
              ->select('bcategories.id', '__bcategories.slug')
              ->where('bcategories.id', '=', $category_id)
-             ->where('__bcategories.locale_id', '=', 1)
+             ->where('__bcategories.locale_id', '=', $localeId)
              ->first();
         return  $enSlug->slug;
 }
 
 function getBlogEnSlug($blog_id){
+    $localeId = getFallbackLocaleId();
     $enSlug = DB::table('blogs')
              ->join('__blogs', 'blogs.id', '=', '__blogs.blog_id')
              ->select('blogs.id', '__blogs.slug')
              ->where('blogs.id', '=', $blog_id)
-             ->where('__blogs.locale_id', '=', 1)
+             ->where('__blogs.locale_id', '=', $localeId)
              ->first();
         return  $enSlug->slug;
 }
